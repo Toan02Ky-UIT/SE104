@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Đăng ký - Shop Shoes</title>
+  <link rel="stylesheet" href="login_register.css" />
+</head>
+<body>
+  <a href="../index.html" class="back-arrow-icon" title="Quay về trang chủ">&#x21A9;</a>
+  <div class="container">
+    <div class="left-side">
+      <h1>Shop Shoes</h1>
+      <p>Nơi cung cấp giải pháp bán giày online cho các doanh nghiệp nhỏ</p>
+    </div>
+    <div class="right-side register-container">
+      <h2 class="title">Tạo tài khoản mới</h2>
+      <p class="subtext">Nhanh chóng và dễ dàng</p>
+      <form action="#" method="POST">
+        <!-- Tên (chỉ cho phép chữ cái và dấu cách) -->
+        <input type="text" name="fullName" placeholder="Họ và tên" required pattern="^[A-Za-zÀ-Ỹà-ỹ\s]+$" title="Tên không hợp lệ. Chỉ chứa chữ cái và dấu cách." />
+
+        <!-- Email (chỉ cho phép @gmail.com) -->
+        <input type="email" name="email" placeholder="Email" required pattern=".+@gmail\.com" title="Email phải có đuôi @gmail.com." />
+
+        <!-- Số điện thoại (bắt đầu với 0 và có đủ 10 chữ số) -->
+        <input type="tel" id="phone" name="phone" placeholder="Số điện thoại" required />
+
+          <script>
+          const phoneInput = document.getElementById("phone");
+
+          phoneInput.addEventListener("input", function () {
+          const phone = phoneInput.value;
+
+          // Kiểm tra bắt đầu bằng số 0
+          if (!phone.startsWith("0")) {
+            phoneInput.setCustomValidity("Số điện thoại phải bắt đầu bằng số 0.");
+          }
+          // Kiểm tra đủ đúng 10 chữ số (tất cả là số)
+          else if (!/^\d{10}$/.test(phone)) {
+            phoneInput.setCustomValidity("Số điện thoại phải có đúng 10 chữ số.");
+          } else {
+            phoneInput.setCustomValidity(""); // Hợp lệ
+          }
+          });
+          </script>
+
+        <!-- Mật khẩu (phải có ít nhất một ký tự đặc biệt) -->
+        <input type="password" name="password" placeholder="Mật khẩu" required minlength="6" pattern=".*[!@#$%^&*(),.?\":{}|].*" title="Mật khẩu phải có ít nhất một ký tự đặc biệt." />
+
+        <!-- Xác nhận mật khẩu -->
+        <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu" required />
+
+        <button type="submit">Đăng ký</button>
+      </form>
+      <div class="switch-auth">
+        Bạn đã có tài khoản?
+        <a href="login.html">Đăng nhập ngay</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
