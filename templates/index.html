@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src = "https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Shoes Web</title>
+</head>
+<body>
+<header>
+<nav class="navbar">
+    <div class="logo">
+        <img src="assets/logo1.png" alt="Logo">
+    </div>
+
+    <div class="menu">
+        <li><a href="#">Về chúng tôi</a></li>
+        <li><a href="#">Tất cả sản phẩm</a></li>
+        <li><a href="#">Ưu đãi</a></li>
+    </div>
+
+    <div class="navbar-right">
+        <form class="search-form" action="#" method="GET">
+            <input type="text" placeholder="Tìm kiếm..." name="q">
+            <button type="submit">🔍</button>
+        </form>
+
+        <a href="cart.html" class="cart-icon" title="Giỏ hàng">
+            <i class="fas fa-shopping-bag"></i> <!-- hoặc fa-shopping-basket -->
+        </a>
+        
+        <a href="account.html" class="account-icon" title="Tài khoản">
+            <i class="fas fa-user-alt"></i>
+        </a>
+
+        <div class="user-auth">
+            <a href="auth/login.html" class="login">Đăng nhập</a> /
+            <a href="auth/register.html" class="register">Đăng ký</a>
+        </div>
+    </div>
+</nav>
+    <div class="others">
+
+    </div>
+</header>
+
+<!-- Banner -->
+<section id="banner">
+  <div class="banner-content">
+    <h1>Chào mừng đến với Shoes Web</h1>
+    <p>Khám phá bộ sưu tập giày thể thao mới nhất</p>
+    <a href="#new-products" class="btn">Mua ngay</a>
+  </div>
+</section>
+
+<!-- SẢN PHẨM MỚI -->
+<section id="new-products" class="product-section">
+  <h2>Sản phẩm mới</h2>
+  <div class="product-list">
+    <div class="product-card">
+      <img src="assets/puma.jpg" alt="Giày mới 1">
+      <div class="hover-cart">
+        <button class="add-to-cart">🛒 Thêm vào giỏ</button>
+      </div>
+      <h3>Giày Puma</h3>
+      <p>1.200.000đ</p>
+      <button class="btn">Mua ngay</button>
+    </div>
+
+    <div class="product-card">
+      <img src="assets/nike.jpg" alt="Giày mới 2">
+      <div class="hover-cart">
+        <button class="add-to-cart">🛒 Thêm vào giỏ</button>
+      </div>
+      <h3>Giày Nike</h3>
+      <p>980.000đ</p>
+      <button class="btn">Mua ngay</button>
+    </div>
+  </div>
+</section>
+
+<!-- SẢN PHẨM NỔI BẬT -->
+<section id="featured-products" class="product-section">
+  <h2>Sản phẩm nổi bật</h2>
+  <div class="product-list">
+    <div class="product-card">
+      <img src="assets/adidas.jpg" alt="Giày nổi bật 1">
+      <div class="hover-cart">
+        <button class="add-to-cart">🛒 Thêm vào giỏ</button>
+      </div>
+      <h3>Giày Adidas</h3>
+      <p>1.500.000đ</p>
+      <button class="btn">Mua ngay</button>
+    </div>
+
+    <div class="product-card">
+      <img src="assets/vans.jpg" alt="Giày nổi bật 2">
+      <div class="hover-cart">
+        <button class="add-to-cart">🛒 Thêm vào giỏ</button>
+      </div>
+      <h3>Giày Vans</h3>
+      <p>1.750.000đ</p>
+      <button class="btn">Mua ngay</button>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- FOOTER -->
+ <footer>
+  <div class="footer-content">
+    <p>&copy; 2023 Shoes Web. All rights reserved.</p>
+    <ul class="social-icons">
+      <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+      <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+      <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+    </ul>
+  </div>
+
+</body>
+</html>

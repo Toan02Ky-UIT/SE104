@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thanh toán đơn hàng</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    #total-price {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 20px;
+      text-align: right;
+    }
+    button#pay-now {
+      display: block;
+      margin: 40px auto 0 auto;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button#pay-now:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Thanh toán đơn hàng</h1>
+
+  <div id="cart-items"></div>
+  <div id="total-price"></div>
+
+  <button id="pay-now">Xác nhận thanh toán</button>
+
+  <script>
+    // Lấy giỏ hàng từ localStorage
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    if (cart.length === 0) {
+      alert('Giỏ hàng trống! Vui lòng chọn sản phẩm trước khi thanh toán.');
+      window.location.href = 'index.html'; // Chuyển về trang chủ hoặc trang sản phẩm
+    }
+
+    function formatVND(num) {
+      return num.toLocaleString('vi-VN') + '₫';
+    }
+
+    function renderCart() {
+      const cartItemsEl = document.getElementById('cart-items');
+      const totalPriceEl = document.getElementById('total-price');
+      cartItemsEl.innerHTML = '';
+      let total = 0;
+      cart.forEach(item => {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'cart-item';
+        itemEl.innerHTML = `
+          <span>${item.name} x ${item.qty}</span>
+          <span>${formatVND(item.price * item.qty)}</span>
+        `;
+        cartItemsEl.appendChild(itemEl);
+        total += item.price * item.qty;
+      });
+      totalPriceEl.textContent = `Tổng tiền: ${formatVND(total)}`;
+    }
+
+    renderCart();
+
+    document.getElementById('pay-now').addEventListener('click', () => {
+      alert('Cảm ơn bạn đã thanh toán! (Chức năng thực tế chưa được triển khai)');
+      // Sau khi thanh toán xong, có thể xóa giỏ hàng hoặc chuyển trang khác
+      localStorage.removeItem('cart');
+      window.location.href = 'index.html'; // hoặc trang cảm ơn, trang chủ
+    });
+  </script>
+</body>
+</html>
