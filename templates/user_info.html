@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông Tin Người Dùng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style4.css') }}?v=1.2">
+</head>
+<body>
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="z-index: 9999;">
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="toast align-items-center text-white bg-{{ 'success' if category == 'success' else 'danger' }} border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="d-flex">
+                                <div class="toast-body">
+                                    {{ message }}
+                                </div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    <div class="container mt-4">
+        
+
+        <h1>Thông tin người dùng</h1>
+
+        <p><strong>Tên người dùng:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Địa chỉ:</strong> {{ user.address or 'Chưa có' }}</p>
+        <p><strong>Số điện thoại:</strong> {{ user.phone or 'Chưa có' }}</p>
+        
+
+        <h3>Thống kê</h3>
+            <li class="list-group-item">
+                Tổng số đơn hàng đang xử lý: {{
+                          user.orders | selectattr("status","equalto","Pending") | list | length
+                        + user.orders | selectattr("status","equalto","Đã xác nhận") | list | length
+                        + user.orders | selectattr("status","equalto","Đang vận chuyển") | list | length
+                }}
+            </li>
+            <li class="list-group-item">
+                Tổng số đơn hàng hoàn thành: {{ user.orders | selectattr("status","equalto","Đã nhận") | list | length }}
+            </li>
+                {% set total_delivered = user.orders | selectattr("status","equalto","Đã nhận") | sum(attribute='total_price') | int %}
+            <li class="list-group-item">
+                Tổng số tiền đã mua: {{ total_delivered | int }} VNĐ
+            </li>
+
+
+        <h3>Đơn hàng của bạn</h3>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" id="orderTabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link" id="processing-tab" data-bs-toggle="tab" href="#processing" role="tab" aria-controls="processing" aria-selected="false">Đang xử lý</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" id="delivered-tab" data-bs-toggle="tab" href="#delivered" role="tab" aria-controls="delivered" aria-selected="true">Đã giao</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" id="canceled-tab" data-bs-toggle="tab" href="#canceled" role="tab" aria-controls="canceled" aria-selected="false">Đã hủy</a>
+            </li>
+        </ul>
+
+        <!-- Tab content -->
+        <div class="tab-content mt-3">
+            <div class="tab-pane fade show active" id="delivered" role="tabpanel" aria-labelledby="delivered-tab">
+                <ul class="list-group">
+                {% for order in user.orders if order.status == "Đã nhận" %}
+                    <li class="list-group-item">
+                        Đơn hàng #{{ order.id }} - 
+                        Ngày hoàn thành: {{ order.created_at }} - 
+                        Tổng cộng: {{ order.total_price | int }} VNĐ
+                        <a class="btn btn-info btn-sm float-end" href="{{ url_for('order_detail', order_id=order.id) }}">Xem chi tiết</a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+
+            <div class="tab-pane fade" id="processing" role="tabpanel" aria-labelledby="processing-tab">
+                <ul class="list-group">
+                {% for order in user.orders if order.status == "Pending" or order.status == "Đã xác nhận" or order.status == "Đang vận chuyển" %}
+                    <li class="list-group-item">
+                        Đơn hàng #{{ order.id }} - 
+                        Trạng thái: {{ order.status }} - 
+                        Ngày tạo: {{ order.created_at }} - 
+                        Tổng cộng: {{ order.total_price | int }} VNĐ
+                        <a class="btn btn-info btn-sm float-end" href="{{ url_for('order_detail', order_id=order.id) }}">Xem chi tiết</a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+
+            <div class="tab-pane fade" id="canceled" role="tabpanel" aria-labelledby="canceled-tab">
+                <ul class="list-group">
+                {% for order in user.orders if order.status == "Đã hủy" %}
+                    <li class="list-group-item">
+                        Đơn hàng #{{ order.id }} - 
+                        Lý do hủy: {{ order.cancellation_reason or ''}} - 
+                        Ngày tạo: {{ order.created_at }} - 
+                        Tổng cộng: {{ order.total_price | int }} VNĐ
+                        <a class="btn btn-info btn-sm float-end" href="{{ url_for('order_detail', order_id=order.id) }}">Xem chi tiết</a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <a href="{{ url_for('home') }}" class="btn btn-primary mt-3">Quay lại trang chủ</a>
+        <a href="{{ url_for('edit_profile') }}" class="btn btn-warning mt-3">Chỉnh sửa thông tin</a>
+        <a href="{{ url_for('change_password') }}" class="btn btn-info mt-3">Đổi mật khẩu</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger mt-3">Đăng xuất</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+  
+        document.querySelectorAll('.toast').forEach(function(toastEl) {
+            const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
+            toast.show();
+        });
+    </script>
+</body>
+</html>
