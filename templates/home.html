@@ -12,7 +12,6 @@
 </head>
 <body>
 
-<!-- TOAST -->
 <div aria-live="polite" aria-atomic="true" class="position-relative" style="z-index: 9999;">
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -30,7 +29,7 @@
     </div>
 </div>
 
-<!-- NAVBAR -->
+
 <header>
 <nav class="navbar">
     <div class="logo">
@@ -57,7 +56,7 @@
                 Xin chào, {{ current_user.username }} |
                 {% if current_user.role == 'admin' %}
                 <a href="{{ url_for('admin') }}">Trang admin</a> |
-                <a href="{{ url_for('inventory') }}">Kho đồ</a> |
+                
                 {% endif %}
                 {% if current_user.role == 'staff' %}
                 <a href="{{ url_for('inventory') }}">Kho đồ</a> |
@@ -72,18 +71,18 @@
 </nav>
 </header>
 
-<!-- BANNER -->
+
 <section id="banner">
   <div class="overlay"></div>
   <div class="banner-content">
     <h1>Chào mừng đến với Shoes Web</h1>
     <p>Khám phá bộ sưu tập giày thể thao mới nhất</p>
-    <a href="#product-section" class="btn">Mua ngay</a>
+    
   </div>
 </section>
 
 
-<!-- DANH SÁCH SẢN PHẨM -->
+
 <section id="product-list" class="container mt-5">
     <h2 class="mb-4">Sản phẩm của chúng tôi</h2>
     <div class="row">
@@ -101,7 +100,7 @@
                     <p class="card-text"><strong>{{ product.price | int }} VNĐ</strong></p>
 
                     {% if product.sizes|selectattr("stock", "gt", 0)|list %}
-                    <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" class="mt-auto">
+                    <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" class="mt-auto add-to-cart-form">
                         <select name="size_id" class="form-select mb-2">
                             {% for ps in product.sizes %}
                                 {% if ps.stock > 0 %}
@@ -121,7 +120,7 @@
     </div>
 </section>
 
-<!-- FOOTER -->
+
 <footer class="mt-5">
   <div class="footer-content text-center p-4">
     <p>&copy; 2023 Shoes Web. All rights reserved.</p>
@@ -135,10 +134,57 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+
     document.querySelectorAll('.toast').forEach(function(toastEl) {
         const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
         toast.show();
     });
+
+    document.querySelectorAll('.add-to-cart-form').forEach(function(form) {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Ngăn trang tải lại
+
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest' // Để backend biết đây là AJAX
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast(data.message, "success");
+            } else {
+                showToast(data.message || "Có lỗi xảy ra", "danger");
+            }
+        })
+        .catch(error => {
+            showToast("Lỗi mạng", "danger");
+            console.error(error);
+        });
+    });
+});
+
+function showToast(message, category) {
+    const toastHTML = `
+        <div class="toast align-items-center text-white bg-${category} border-0 show" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `;
+    const container = document.querySelector('.toast-container');
+    container.insertAdjacentHTML('beforeend', toastHTML);
+
+    const toastEl = container.lastElementChild;
+    const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+    toast.show();
+}
 </script>
+
 </body>
 </html>

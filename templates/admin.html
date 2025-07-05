@@ -27,7 +27,51 @@
         </div>
     </div>
 
+    
+
     <div class="container mt-4">
+
+        <h2 class="mt-5">Báo cáo doanh thu</h2>
+
+            <form method="get" class="mb-3">
+                <div class="row">
+                    <div class="col-md-3">
+                        <select name="type" class="form-control">
+                            <option value="day" {% if report_type == 'day' %}selected{% endif %}>Theo ngày</option>
+                            <option value="month" {% if report_type == 'month' %}selected{% endif %}>Theo tháng</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Xem báo cáo</button>
+                    </div>
+                </div>
+            </form>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>{% if report_type == 'month' %}Tháng{% else %}Ngày{% endif %}</th>
+                        <th>Tổng doanh thu</th>
+                    <th>Số đơn hàng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in revenue_data %}
+                        <tr>
+                            <td>
+                                {% if report_type == 'month' %}
+                                    {{ row.year }}-{{ "%02d"|format(row.month) }}
+                                {% else %}
+                                    {{ row.date }}
+                                {% endif %}
+                            </td>
+                            <td>{{ "{:,.0f}".format(row.total_revenue) }} VND</td>
+                            <td>{{ row.total_orders }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
         <h1>Quản Trị Viên</h1>
 
         <h2>Thêm sản phẩm mới</h2>
@@ -112,7 +156,7 @@
                             <td>{{ product.price | int }}</td>
                             <td>
                                 <form method="GET" action=""> 
-                                <!-- Giống như filter theo size, nhưng chỉ ảnh hưởng dòng này -->
+                                
                                     <input name="selectedProductId" type="hidden" value="{{ product.id }}"> 
                                     <select name="selectedSize" data-product-id="{{ product.id }}" onchange="loadStock(this)"> 
 
@@ -215,7 +259,7 @@
                         <td>
                             <form action="{{ url_for('set_staff', user_id=u.id) }}" method="POST">
                                 <select name="role" class="form-select">
-                                   <option value="user">User</option>
+                                   <option value="customer">Customer</option>
                                    <option value="staff">Staff</option>
                                    <option value="admin">Admin</option>
                                 </select>
@@ -228,18 +272,9 @@
             </tbody>
         </table>
 
-        {% if total_revenue is defined %}
-            <div class="alert alert-info">
-                Tổng doanh thu: {{ total_revenue | int }} VNĐ
-            </div>
+        
 
-            <h5>Thống kê đơn hàng:</h5>
-                <ul>
-                    {% for status, count in status_count.items() %}
-                        <li>{{ status }}: {{ count }} đơn</li>
-                    {% endfor %}
-                </ul>
-        {% endif %}
+
 
         <a href="{{ url_for('home') }}" class="btn btn-secondary">Quay lại trang chủ</a>
     </div>

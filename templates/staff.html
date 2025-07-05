@@ -87,7 +87,7 @@
                         <td>{{ order.id }}</td>
                         <td>{{ order.user.username }}</td>
                         <td>{{ order.status }}</td>
-                        <td>{{ order.created_at }}</td>
+                        <td>{{ order.created_at }}</td> 
                         <td>
                             <a href="{{ url_for('view_order', order_id=order.id) }}" class="btn btn-info">Chi tiết</a>
                         </td>
@@ -99,11 +99,11 @@
                                    <option value="Đang vận chuyển">Đang vận chuyển</option>
                                    <option value="Đã nhận">Đã nhận</option>
                                    <option value="Đã hủy">Đã hủy</option>
+                                   <div id="reasonDiv" class="mt-2" style="display:none;">
+                                    <input type="text" class="form-control" name="cancellation_reason" id="cancellation_reason" placeholder="Lý do hủy">
+                                    </div>
                                 </select>
-                                <div id="reasonDiv" class="mt-2" style="display:none;">
-                                    <label for="cancellation_reason">Lý do hủy:</label>
-                                    <input type="text" class="form-control" name="cancellation_reason" id="cancellation_reason">
-                                </div>
+                                
                                 <button type="submit" class="btn btn-primary mt-2">Cập nhật</button>
                             </form>
                         </td>
